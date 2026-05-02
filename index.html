@@ -1,0 +1,588 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#B71C1C">
+<title>Sunee Member</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="overrides.css">
+</head>
+<body>
+  <main class="device auth-mode" aria-label="Sunee Member mobile prototype">
+    <aside class="desktop-sidebar" aria-label="Desktop navigation">
+      <div class="desktop-brand">
+        <div class="brand-mark">S</div>
+        <strong>Sunee</strong>
+      </div>
+      <nav>
+        <button data-screen-target="home"><b>⌂</b><span>หน้าหลัก</span></button>
+        <button data-screen-target="points"><b>★</b><span>My Point</span></button>
+        <button data-screen-target="scanner"><b>▣</b><span>สแกน QR</span></button>
+        <button data-screen-target="coupons"><b>%</b><span>คูปอง</span></button>
+        <button data-screen-target="stamps"><b>◆</b><span>My Stamp</span></button>
+        <button data-screen-target="merchant"><b>⌂</b><span>ร้านค้า</span></button>
+        <button data-screen-target="profile"><b>○</b><span>โปรไฟล์</span></button>
+      </nav>
+      <button class="desktop-logout" data-screen-target="login"><b>↗</b><span>ออกจากระบบ</span></button>
+    </aside>
+    <section class="screen active login-screen" data-screen="login">
+      <div class="status red-status"><span>9:41</span><span class="battery"></span></div>
+      <div class="login-shell">
+        <div class="brand-mark large login-image-logo"><img src="icon/icon-sunee.png" alt="Sunee Member"></div>
+        <h1>SUNEE MEMBER</h1>
+        <p></p>
+        <div class="login-tabs" role="tablist">
+          <button class="login-tab active" data-login-tab="pin">PIN</button>
+          <button class="login-tab" data-login-tab="bio">ลายนิ้วมือ</button>
+          <button class="login-tab" data-login-tab="phone">เบอร์โทร</button>
+        </div>
+
+        <div class="login-card login-panel active" data-login-panel="pin">
+          <h2>ใส่รหัส PIN 6 หลัก</h2>
+          <div class="pin-dots" id="pinDots"></div>
+          <div class="pin-grid" id="pinGrid"></div>
+          <button class="link-btn" data-login-tab="phone">ลืมรหัส PIN?</button>
+          <button class="register-link-btn" data-screen-target="register">สมัครสมาชิก</button>
+        </div>
+
+        <div class="login-card login-panel" data-login-panel="bio">
+          <h2>เข้าสู่ระบบด้วย Biometric</h2>
+          <p>วางนิ้วหรือดูที่กล้องเพื่อยืนยันตัวตน</p>
+          <button class="fingerprint" id="bioButton" aria-label="scan fingerprint">
+            <span></span>
+          </button>
+          <div class="muted" id="bioStatus">แตะเพื่อสแกนลายนิ้วมือ</div>
+          <button class="primary full" id="bioLogin">สแกนลายนิ้วมือ / Face ID</button>
+          <button class="secondary full" data-login-tab="pin">ใช้ PIN แทน</button>
+          <button class="register-link-btn" data-screen-target="register">สมัครสมาชิก</button>
+        </div>
+
+        <div class="login-card login-panel" data-login-panel="phone">
+          <div id="phoneEntry">
+            <h2>เข้าสู่ระบบด้วยเบอร์โทรศัพท์</h2>
+            <p>กรอกเบอร์โทรศัพท์และรหัสผ่านที่ลงทะเบียน</p>
+            <label class="field-label" for="phoneInput">หมายเลขโทรศัพท์</label>
+            <div class="phone-field">
+              <span>+66</span>
+              <input id="phoneInput" inputmode="numeric" maxlength="10" placeholder="08X-XXX-XXXX">
+            </div>
+            <label class="field-label" for="phonePassword">รหัสผ่าน</label>
+            <div class="phone-field password-field">
+              <input id="phonePassword" type="password" placeholder="กรอกรหัสผ่าน">
+            </div>
+            <button class="primary full" id="phoneLogin">เข้าสู่ระบบ</button>
+            <button class="link-btn forgot-password-btn" id="forgotPassword">ลืมรหัสผ่าน?</button>
+            <button class="secondary full" data-login-tab="pin">กลับ</button>
+            <button class="register-link-btn" data-screen-target="register">สมัครสมาชิก</button>
+          </div>
+          <div id="otpEntry" hidden>
+            <h2>ยืนยัน OTP</h2>
+            <p>ส่งรหัส OTP ไปยัง <strong id="otpPhone">08X-XXX-XXXX</strong></p>
+            <div class="otp-row" id="otpRow"></div>
+            <div class="otp-count">รหัสหมดอายุใน <strong id="otpCountdown">02:00</strong></div>
+            <button class="primary full" id="verifyOtp">ยืนยัน OTP</button>
+            <div class="split-actions">
+              <button class="secondary" id="resendOtp" disabled>ส่งใหม่</button>
+              <button class="secondary" id="changePhone">เปลี่ยนเบอร์</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="forgotPassword">
+      <div class="status"><span>9:41</span><span class="battery"></span></div>
+      <header class="app-header"><div class="brand-mark app-image-logo"><img src="icon/icon-sunee.png" alt=""></div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>ลืมรหัสผ่าน</h2><i></i></div>
+      <div class="scroll profile-form-page">
+        <section class="form-card">
+          <h3>ยืนยันเบอร์โทรศัพท์</h3>
+          <p class="form-note">ระบุเบอร์โทรศัพท์ที่ลงทะเบียน ระบบจะส่งลิงก์ยืนยันสำหรับตั้งรหัสผ่านใหม่ทาง SMS</p>
+          <label>หมายเลขโทรศัพท์<input data-phone-only inputmode="tel" maxlength="10" placeholder="08X-XXX-XXXX"></label>
+          <button class="primary full" id="sendPasswordSms">ส่ง SMS ยืนยัน</button>
+          <button class="secondary full" data-screen-back>กลับ</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="register">
+      <div class="status"><span>9:41</span><span class="battery"></span></div>
+      <header class="app-header"><div class="brand-mark app-image-logo"><img src="icon/icon-sunee.png" alt=""></div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>สมัครสมาชิก</h2><i></i></div>
+      <div class="scroll profile-form-page">
+        <section class="form-card">
+          <label>คำนำหน้า<select><option>คุณ</option><option>นาย</option><option>นาง</option><option>นางสาว</option></select></label>
+          <label>ชื่อ-สกุล<input placeholder="กรอกชื่อ-สกุล"></label>
+          <label>เบอร์โทรศัพท์<input data-phone-only inputmode="tel" maxlength="10" placeholder="08X-XXX-XXXX"></label>
+          <label>E-mail<input type="email" placeholder="example@email.com"></label>
+          <label>Line ID<input placeholder="Line ID"></label>
+          <label>ตั้งรหัส PIN<input data-pin-only inputmode="numeric" maxlength="6" placeholder="PIN 6 หลัก"></label>
+          <label>ยืนยันรหัส PIN<input data-pin-only inputmode="numeric" maxlength="6" placeholder="กรอก PIN อีกครั้ง"></label>
+          <button class="primary full" data-register-submit>สมัครสมาชิก</button>
+          <button class="secondary full" data-screen-back>กลับเข้าสู่ระบบ</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="home">
+      <div class="status"><span>12:30 น.</span><span class="battery"></span></div>
+      <header class="app-header"><div class="brand-mark app-image-logo"><img src="icon/icon-sunee.png" alt=""></div><strong>SUNEE MEMBER</strong></header>
+      <div class="scroll">
+        <section class="profile-banner">
+          <div class="avatar profile-logo"><img src="icon/icon-sunee.png" alt=""></div>
+          <div><span>สวัสดี</span><h2>คุณKP ธวัลรัตน์ ทองคำ</h2></div>
+        </section>
+        <div class="action-row">
+          <button data-transfer-flow><img class="home-action-icon" src="icon/qr-scan.svg" alt="">โอน Point</button>
+          <button id="openMemberQr"><img class="home-action-icon" src="icon/qr-code.svg" alt="">QR Code ของฉัน</button>
+        </div>
+
+        <nav class="quick-grid">
+          <button data-screen-target="points"><span>★</span>My Point</button>
+          <button data-screen-target="stamps"><span>◆</span>My Stamp</button>
+          <button data-screen-target="coupons"><span>%</span>My Coupon</button>
+          <button data-screen-target="merchant">
+            <span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M3 9a2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 2 2 2 2 0 0 0 2-2"/><path d="M5 11v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"/><path d="M9 20v-5h6v5"/></svg>
+            </span>
+            ร้านค้า
+          </button>
+        </nav>
+        <section class="section-head">
+          <h2>รายการคูปอง</h2>
+          <div class="section-actions">
+            <button class="desktop-collect-all" data-home-collect-all>กดเก็บทั้งหมด</button>
+            <button data-coupon-collect-link>ดูทั้งหมด</button>
+          </div>
+        </section>
+        <div class="slide-wrap">
+          <button class="slide-btn prev" data-slide-target="homeCoupons" data-slide-dir="-1" aria-label="เลื่อนคูปองก่อนหน้า">‹</button>
+          <div class="coupon-strip" id="homeCoupons"></div>
+          <button class="slide-btn next" data-slide-target="homeCoupons" data-slide-dir="1" aria-label="เลื่อนคูปองถัดไป">›</button>
+        </div>
+        <div class="home-collect-all-row"><button data-home-collect-all>กดเก็บทั้งหมด</button></div>
+        <section class="section-head event-head"><h2>🎉 กิจกรรม</h2><button data-events-link>ดูทั้งหมด</button></section>
+        <div class="slide-wrap">
+          <button class="slide-btn prev" data-slide-target="homeEvents" data-slide-dir="-1" aria-label="เลื่อนกิจกรรมก่อนหน้า">‹</button>
+          <div class="event-strip" id="homeEvents"></div>
+          <button class="slide-btn next" data-slide-target="homeEvents" data-slide-dir="1" aria-label="เลื่อนกิจกรรมถัดไป">›</button>
+        </div>
+
+        <section class="section-head"><h2>🍽️ โปรโมชั่น</h2><button data-promos-link>ดูทั้งหมด</button></section>
+        <div class="promo-list">
+          <button data-event-detail="5"><span class="promo-thumb image"><img src="images/banners/682709069_1389829999858068_3008098668341900913_n.jpg" alt="ชาบูแซ่บ"></span><span><small>ชาบู</small><b>แซ่บเกินต้าน! เพิ่ม ฿39/ท่าน</b><em>สั่งลิ้นวัวและเอ็นแก้วได้ไม่อั้น</em></span></button>
+          <button data-event-detail="6"><span class="promo-thumb image"><img src="images/banners/678595127_1384984320342636_8606715833503969445_n.jpg" alt="Food Court"></span><span><small>Food Court ชั้น 1</small><b>โปรวันแรงงาน จานยักษ์ ฿79</b><em>1-3 พ.ค. 10:00-21:00 น.</em></span></button>
+          <button data-event-detail="7"><span class="promo-thumb image"><img src="images/banners/683643035_1390125546495180_2495150725598815981_n.jpg" alt="ร้อนสุนีย์"></span><span><small>ร้อนสุนีย์ ชั้น 1</small><b>มื้อเช้าสุดคุ้ม ฿125/ท่าน</b><em>จันทร์-ศุกร์ 06:30-10:00 น.</em></span></button>
+        </div>
+
+        <section class="section-head"><h2>☕ ร้านค้า</h2><button data-shops-link>ดูทั้งหมด</button></section>
+        <div class="promo-list">
+          <button data-event-detail="3"><span class="promo-thumb image"><img src="images/banners/684904038_1391514463022955_8466438417816371258_n.jpg" alt="Momoyo"></span><span><small>Momoyo</small><b>Matcha Frappe Snow Float</b><em>ใหม่! ฿85 / ไม่ใส่ไอศกรีม ฿79</em></span></button>
+        </div>
+      </div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="events">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>กิจกรรม</h2><i></i></div>
+      <div class="scroll event-list-page" id="eventList"></div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="promos">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>โปรโมชั่น</h2><i></i></div>
+      <div class="scroll promo-list" id="promoListFull" style="padding:12px;"></div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="shops">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>ร้านค้าใน Sunee Tower</h2><i></i></div>
+      <div class="scroll promo-list" id="shopListFull" style="padding:12px;"></div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="merchant">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>สำหรับร้านค้า</h2><i></i></div>
+      <div class="scroll merchant-page">
+        <section class="merchant-hero">
+          <span class="merchant-store-icon">SHOP</span>
+          <div>
+            <small>บัญชีร้านค้า</small>
+            <h3>Sunee Partner Store</h3>
+            <p>สถานะ: เจ้าของร้าน / ดีลร้านค้า</p>
+          </div>
+        </section>
+        <section class="merchant-actions">
+          <button data-screen-target="scanner"><b>▣</b><span>สแกน QR ลูกค้า</span></button>
+          <button data-screen-target="coupons"><b>%</b><span>จัดการคูปอง</span></button>
+          <button data-screen-target="history"><b>≡</b><span>รายการวันนี้</span></button>
+          <button data-shops-link><b>⌂</b><span>ข้อมูลร้านค้า</span></button>
+        </section>
+        <section class="merchant-summary">
+          <div><span>รายการวันนี้</span><b>24</b></div>
+          <div><span>แต้มที่รับ/ใช้</span><b>3,240</b></div>
+          <div><span>คูปองใช้แล้ว</span><b>8</b></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="eventDetail">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2 id="eventDetailTitle">กิจกรรม</h2><i></i></div>
+      <div class="scroll event-detail-page">
+        <section class="event-detail-hero" id="eventDetailHero"></section>
+        <section class="event-detail-body">
+          <small id="eventDetailTag">กิจกรรม</small>
+          <h2 id="eventDetailName">MEMORY WAVE ART</h2>
+          <p id="eventDetailDate">6 มี.ค. 2569 เวลา 17:00 น.</p>
+          <div id="eventDetailText">รายละเอียดกิจกรรม</div>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="points">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>My Point</h2><i></i></div>
+      <div class="scroll list" id="pointList"></div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="stamps">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>My Stamp</h2><i></i></div>
+      <div class="scroll list" id="stampList"></div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="coupons">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>My Coupon</h2><i></i></div>
+      <div class="tabs" id="couponTabs"></div>
+      <div class="scroll list" id="couponList"></div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <!-- ===== MODAL: QR Code ของฉัน ===== -->
+    <div class="modal" id="memberQrModal" hidden>
+      <div class="modal-sheet" style="padding:20px 20px 28px;">
+        <button class="modal-close" id="closeMemberQr">×</button>
+        <!-- Member info -->
+        <div class="member-chip" style="margin-bottom:16px;">
+          <div class="avatar small">ธ</div>
+          <div style="flex:1;">
+            <b>คุณKP ธวัลรัตน์ ทองคำ</b>
+            <span>SM-KP-2024-00847</span>
+          </div>
+        </div>
+        <!-- QR -->
+        <div class="qr-card" id="memberQrCode" style="margin:0 auto 12px;"></div>
+        <code style="display:block;text-align:center;margin-bottom:4px;font-size:13px;letter-spacing:1px;color:#777;">SM-KP-2024-00847</code>
+        <p style="font-size:11px;color:#999;text-align:center;margin-bottom:16px;">ให้พนักงานสแกน QR นี้เพื่อสะสมแต้ม</p>
+        <!-- Save & Share -->
+        <div class="split-actions wide">
+          <button class="secondary" id="saveQr">บันทึก</button>
+          <button class="primary" id="shareQr">แชร์</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="screen scanner-screen" data-screen="scanner">
+      <div class="status dark"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="scanner-step active" data-scan-step="scan">
+        <p id="scanTitle">แสกน QR Code ของลูกค้า</p>
+        <small id="scanSub">เพื่อตรวจสอบและตัดใช้แต้ม</small>
+        <div class="scan-frame"><span></span></div>
+        <button class="primary" id="scanNow">สแกน QR Code</button>
+        <div class="scanner-corner-actions">
+          <button type="button" data-screen-back>ยกเลิก</button>
+          <label>คลังภาพ<input type="file" accept="image/*" id="galleryInput"></label>
+        </div>
+      </div>
+      <div class="scanner-step" data-scan-step="redeem">
+        <div class="found-bar"><div class="avatar small" id="foundAvatar">ธ</div><div><small id="foundLabel">สมาชิกที่พบ</small><b id="foundName">คุณKP ธวัลรัตน์ ทองคำ</b><span id="foundCode">SM-KP-2024-00847</span></div></div>
+        <div class="success-bar" id="scanSuccessText">สแกน QR สำเร็จ เลือกรายการ My Point ที่ต้องการตัดใช้</div>
+        <div class="redeem-body">
+          <div class="transfer-label">
+            <h2 id="pointListTitle">My Point</h2>
+            <p id="pointListSub">เลื่อนเลือกรายการ แล้วระบุยอดด้านล่าง</p>
+          </div>
+          <div class="point-picker" id="redeemCards"></div>
+          <div class="redeem-form">
+            <h3 id="redeemName">Point App</h3>
+            <p>คงเหลือ <strong id="redeemBalance">3,716.00</strong> แต้ม</p>
+            <input id="redeemAmount" inputmode="decimal" placeholder="0">
+            <div class="amount-row"><button data-amt="100">100</button><button data-amt="500">500</button><button data-amt="1000">1,000</button><button data-amt="max">ทั้งหมด</button></div>
+            <textarea id="redeemNote" placeholder="หมายเหตุ (ไม่บังคับ)"></textarea>
+            <button class="primary full" id="reviewRedeem">ตรวจสอบตัดจ่าย</button>
+            <button class="secondary full" id="scanAgain">สแกนใหม่</button>
+          </div>
+        </div>
+      </div>
+      <div class="scanner-step" data-scan-step="review">
+        <div class="review-card">
+          <h2 id="reviewTitle">สรุปรายการตัดจ่าย</h2>
+          <dl id="reviewDetails"></dl>
+          <div class="warning" id="reviewWarning">กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนยืนยัน การตัดจ่ายแต้มไม่สามารถยกเลิกได้หลังยืนยันแล้ว</div>
+          <button class="primary full" id="confirmRedeem">ยืนยันตัดใช้</button>
+          <button class="secondary full" id="reviewCancel">ยกเลิก</button>
+        </div>
+      </div>
+      <div class="scanner-step" data-scan-step="done">
+        <div class="done-mark">✓</div>
+        <h2 id="doneTitle">ตัดใช้สำเร็จ!</h2>
+        <p id="doneMessage">ตัดใช้แต้มเรียบร้อยแล้ว</p>
+        <div class="receipt" id="receipt"></div>
+        <div class="split-actions wide" style="margin-bottom:10px;">
+          <button class="secondary" id="shareSlip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            บันทึกสลิป
+          </button>
+          <button class="primary" id="finishRedeem">เสร็จสิ้น</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="history">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="history-back-row"><button data-screen-back>‹</button><h2 id="historyTitle">Point App</h2><i></i></div>
+      <div class="scroll history-page">
+        <section class="history-point-card">
+          <div class="history-point-main">
+            <span class="history-point-logo">SUNEE<br>TOWER</span>
+            <div>
+              <h3 id="historyPointName">Point App</h3>
+              <strong id="historyCurrentBalance">3,316.00</strong>
+            </div>
+          </div>
+        </section>
+        <div class="history-actions">
+          <button data-history-use><span class="ha-icon">▣</span>แลกสิทธิ์</button>
+          <button data-history-transfer><span class="ha-icon">⇄</span>โอน</button>
+        </div>
+        <div class="history-head">
+          <h3>รายการล่าสุด</h3>
+          <select id="historyMonthSelect" aria-label="เลือกเดือนรายการ">
+            <option value="2026-05" selected>พฤษภาคม 2026</option>
+            <option value="2026-04">เมษายน 2026</option>
+            <option value="2026-03">มีนาคม 2026</option>
+            <option value="2026-02">กุมภาพันธ์ 2026</option>
+            <option value="2026-01">มกราคม 2026</option>
+            <option value="2025-12">ธันวาคม 2025</option>
+          </select>
+        </div>
+        <section class="history-ledger" id="historyList">
+          <article class="history-item" data-flow="history" data-type="ซื้อสินค้า" data-point="Point App" data-ref="5576905-00039" data-time="01/05/2026 - 13:49" data-amt="-400.00" data-bal="3,316.00" data-note="—" data-txn="5576905-00039"><div class="history-row-main"><div><b>ซื้อสินค้า</b><span>5576905-00039</span><time>01/05/2026 - 13:49</time></div><strong>-400.00<small>3,316.00</small><button class="history-expand-toggle" type="button" aria-label="ขยายรายการ"></button></strong></div><div class="history-row-extra"><button type="button" data-history-slip-open>ดูสลิป</button></div></article>
+          <article class="history-item" data-flow="history" data-type="ซื้อสินค้า" data-point="Point App" data-ref="7680932-10547230048625336" data-time="01/05/2026 - 09:24" data-amt="-47.00" data-bal="3,716.00" data-note="—" data-txn="7680932-10547230048625336"><div class="history-row-main"><div><b>ซื้อสินค้า</b><span>7680932-10547230048625336</span><time>01/05/2026 - 09:24</time></div><strong>-47.00<small>3,716.00</small><button class="history-expand-toggle" type="button" aria-label="ขยายรายการ"></button></strong></div><div class="history-row-extra"><button type="button" data-history-slip-open>ดูสลิป</button></div></article>
+          <article class="history-item" data-flow="history" data-type="ซื้อสินค้า" data-point="Point App" data-ref="4566905-0034" data-time="01/05/2026 - 09:21" data-amt="-153.00" data-bal="3,763.00" data-note="—" data-txn="4566905-0034"><div class="history-row-main"><div><b>ซื้อสินค้า</b><span>4566905-0034</span><time>01/05/2026 - 09:21</time></div><strong>-153.00<small>3,763.00</small><button class="history-expand-toggle" type="button" aria-label="ขยายรายการ"></button></strong></div><div class="history-row-extra"><button type="button" data-history-slip-open>ดูสลิป</button></div></article>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="profile">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="scroll">
+        <section class="profile-top"><div class="avatar big">ธ</div><h2>คุณKP ธวัลรัตน์ ทองคำ</h2><p>SM-KP-2024-00847</p><b>Gold Member</b></section>
+        <div class="menu-list">
+          <button data-screen-target="profileEdit">ข้อมูลส่วนตัว</button>
+          <button data-screen-target="memberBenefits">เงื่อนไขสิทธิ์ประโยชน์สมาชิก</button>
+          <button data-screen-target="changePassword">เปลี่ยนรหัสผ่าน</button>
+          <button data-open-pin-change>เปลี่ยนรหัส PIN</button>
+          <button data-screen-target="suneeContact">ข้อมูลติดต่อ Sunee Tower</button>
+          <button class="danger" data-screen-target="login">ออกจากระบบ</button>
+        </div>
+      </div>
+      <nav class="bottom-nav"></nav>
+    </section>
+
+    <section class="screen" data-screen="profileEdit">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>ข้อมูลส่วนตัว</h2><i></i></div>
+      <div class="scroll profile-form-page">
+        <section class="form-card">
+          <label>คำนำหน้า<select><option>คุณ</option><option>นาย</option><option>นาง</option><option>นางสาว</option></select></label>
+          <label>ชื่อ-สกุล<input value="คุณKP ธวัลรัตน์ ทองคำ"></label>
+          <label>เบอร์โทรศัพท์<input data-phone-only inputmode="tel" maxlength="10" value="0812345678"></label>
+          <label>E-mail<input type="email" value="kp.sunee@example.com"></label>
+          <label>Line ID<input value="kp.sunee"></label>
+          <label>ที่อยู่<input value="512/8 ถนนชยางกูร"></label>
+          <label>ตำบล<input value="ในเมือง"></label>
+          <label>อำเภอ<input value="เมืองอุบลราชธานี"></label>
+          <label>จังหวัด<input value="อุบลราชธานี"></label>
+          <button class="primary full" data-profile-save>บันทึกข้อมูล</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="changePassword">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>เปลี่ยนรหัสผ่าน</h2><i></i></div>
+      <div class="scroll profile-form-page">
+        <section class="form-card">
+          <label>รหัสผ่านปัจจุบัน<input type="password" placeholder="กรอกรหัสผ่านปัจจุบัน"></label>
+          <label>รหัสผ่านใหม่<input type="password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
+          <label>ยืนยันรหัสผ่านใหม่<input type="password" placeholder="กรอกอีกครั้ง"></label>
+          <p class="form-note">เพื่อความปลอดภัย ควรใช้ตัวอักษร ตัวเลข และสัญลักษณ์ร่วมกัน</p>
+          <button class="primary full" data-profile-save>บันทึกรหัสผ่านใหม่</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="changePin">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>เปลี่ยนรหัส PIN</h2><i></i></div>
+      <div class="scroll profile-form-page">
+        <section class="form-card">
+          <label>PIN ปัจจุบัน<input data-pin-only inputmode="numeric" maxlength="6" placeholder="กรอก PIN 6 หลัก"></label>
+          <label>PIN ใหม่<input data-pin-only inputmode="numeric" maxlength="6" placeholder="กรอก PIN ใหม่"></label>
+          <label>ยืนยัน PIN ใหม่<input data-pin-only inputmode="numeric" maxlength="6" placeholder="กรอก PIN ใหม่อีกครั้ง"></label>
+          <p class="form-note">PIN ใช้สำหรับเข้าสู่ระบบและยืนยันรายการสำคัญ</p>
+          <button class="primary full" data-profile-save>บันทึก PIN ใหม่</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="memberBenefits">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>สิทธิ์ประโยชน์สมาชิก</h2><i></i></div>
+      <div class="scroll profile-info-page">
+        <section class="benefit-hero"><b>Gold Member</b><span>คะแนนสะสม 4,816 แต้ม</span></section>
+        <section class="info-card">
+          <h3>เงื่อนไขการสะสมแต้ม</h3>
+          <p>ทุกการใช้จ่ายที่ร่วมรายการสามารถสะสมแต้มได้ตามเงื่อนไขของร้านค้าและโปรโมชั่น ณ วันที่ใช้บริการ</p>
+        </section>
+        <section class="info-card">
+          <h3>สิทธิ์สมาชิก Gold</h3>
+          <ul><li>รับคูปองพิเศษประจำเดือน</li><li>ร่วมกิจกรรมสะสมแต้มสองเท่าในช่วงโปรโมชั่น</li><li>แลกสิทธิ์และส่วนลดจากร้านค้าที่ร่วมรายการ</li></ul>
+        </section>
+        <section class="info-card">
+          <h3>ข้อกำหนด</h3>
+          <p>สิทธิ์ประโยชน์ไม่สามารถแลกเปลี่ยนเป็นเงินสด และเงื่อนไขอาจเปลี่ยนแปลงตามประกาศของ Sunee Tower</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="suneeContact">
+      <div class="status"><span>12:30 น.</span></div>
+      <header class="app-header"><div class="brand-mark">S</div><strong>SUNEE MEMBER</strong></header>
+      <div class="sub-header"><button data-screen-back>‹</button><h2>ติดต่อ Sunee Tower</h2><i></i></div>
+      <div class="scroll profile-info-page">
+        <section class="info-card contact-card">
+          <h3>Sunee Tower</h3>
+          <p>512/8 ถนนชยางกูร ตำบลในเมือง อำเภอเมือง จังหวัดอุบลราชธานี 34000</p>
+          <a href="tel:045352900">โทร. 045-352-900</a>
+          <a href="mailto:info@sunee-tower.com">info@sunee-tower.com</a>
+        </section>
+        <section class="info-card">
+          <h3>เวลาทำการ</h3>
+          <p>ทุกวัน 10:00 - 21:00 น.</p>
+        </section>
+        <section class="info-card">
+          <h3>ช่องทางติดต่อเพิ่มเติม</h3>
+          <p>Facebook: Sunee Tower<br>Line Official: @suneetower</p>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===== MODAL: Home Coupon Detail ===== -->
+    <div class="modal" id="homeCouponModal" hidden>
+      <div class="modal-sheet" style="padding:20px 20px 28px;">
+        <button class="modal-close" id="closeHomeCoupon">×</button>
+        <div id="hcmTop" style="border-radius:12px;padding:18px;margin-bottom:16px;text-align:center;">
+          <small id="hcmTag" style="display:inline-block;background:rgba(255,255,255,.25);border-radius:20px;padding:3px 12px;font-size:11px;color:white;margin-bottom:8px;"></small>
+          <div id="hcmVal" style="font-size:30px;font-weight:800;color:white;line-height:1;margin-bottom:4px;"></div>
+          <div id="hcmSub" style="font-size:13px;color:rgba(255,255,255,.85);"></div>
+        </div>
+        <div style="background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:14px;">
+          <div style="font-size:13px;color:#555;margin-bottom:8px;" id="hcmCond"></div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#E65100;font-weight:600;">
+            <span>⏰</span><span id="hcmExp"></span>
+          </div>
+        </div>
+        <!-- Detail text box -->
+        <div style="background:#f8f8f8;border:1px solid #eee;border-radius:8px;padding:12px;margin-bottom:14px;text-align:left;font-size:13px;color:#444;line-height:1.55;" id="hcmDetail"></div>
+        <button class="primary full" id="hcmActionBtn">กดเก็บคูปอง</button>
+      </div>
+    </div>
+
+
+    <div class="home-promo-popup" id="homePromoPopup" hidden>
+      <div class="home-promo-card">
+        <button class="home-promo-close" id="closeHomePromo">×</button>
+        <button class="home-promo-art" id="homePromoDetail" aria-label="ดูรายละเอียดคูปอง">
+          <img src="images/coupon/1777642659466.jpg" alt="คูปองส่วนลด 30%">
+        </button>
+        <button class="home-promo-action" id="homePromoAction">ดูรายละเอียด</button>
+      </div>
+    </div>
+
+    <div class="modal" id="pinChangeModal" hidden>
+      <div class="modal-sheet pin-change-sheet">
+        <button class="modal-close" id="closePinChange">×</button>
+        <h2 id="pinChangeTitle">ยืนยัน PIN ปัจจุบัน</h2>
+        <p id="pinChangeHint">กรอก PIN 6 หลัก เพื่อดำเนินการต่อ</p>
+        <div class="pin-dots pin-change-dots" id="pinChangeDots"></div>
+        <div class="pin-grid pin-change-grid" id="pinChangeGrid"></div>
+        <button class="secondary full" id="pinChangeBack" hidden>ย้อนกลับ</button>
+      </div>
+    </div>
+
+    <div class="modal" id="qrModal" hidden>
+      <div class="modal-sheet">
+        <button class="modal-close" id="closeModal">×</button>
+        <h2 id="modalTitle">QR Code</h2>
+        <p id="modalSub">ให้พนักงานสแกน QR นี้</p>
+        <div class="coupon-modal-image" id="modalCouponImage" hidden></div>
+        <div class="coupon-code-row">
+          <div class="barcode" id="modalBarcode" hidden><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="qr-card small" id="modalQr"></div>
+        </div>
+        <div class="timer" id="modalTimer">หมดอายุใน 04:59</div>
+        <strong id="modalValue"></strong>
+        <code id="modalCode">SM-KP-2024-7823XF</code>
+        <div class="coupon-detail-text" id="couponDetailText" hidden></div>
+        <button class="primary full modal-use-btn" id="modalUseNow" hidden>ใช้เลย</button>
+      </div>
+    </div>
+    <!-- ===== MODAL: History Slip ===== -->
+    <div class="modal" id="historySlipModal" hidden>
+      <div class="modal-sheet">
+        <button class="modal-close" id="closeHistorySlip">×</button>
+        <h2 id="hsmTitle">สลิปรายการ</h2>
+        <div class="receipt slip-receipt" id="hsmReceipt" style="width:100%;margin:14px 0;"></div>
+        <div class="wide">
+          <button class="primary full" id="hsmShareBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            บันทึก
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
