@@ -1,4 +1,4 @@
-node_modules
+﻿node_modules
 .next
 out
 dist
@@ -6,4 +6,4 @@ dist
 .env
 .env.local
 .DS_Store
-
+.vercel
